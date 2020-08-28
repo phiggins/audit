@@ -69,37 +69,6 @@ module ReportHelpers
     URI(Chef::Config.chef_server_url)
   end
 
-  # used for interval timing
-  def create_timestamp_file
-    timestamp = Time.now.utc
-    timestamp_file = File.new(report_timing_file, 'w')
-    timestamp_file.puts(timestamp)
-    timestamp_file.close
-  end
-
-  def report_timing_file
-    # Will create and return the complete folder path for the chef cache location and the passed in value
-    ::File.join(Chef::FileCache.create_cache_path('compliance'), 'report_timing.json')
-  end
-
-  def profile_overdue_to_run?(interval)
-    # Calculate when a report was last created so we delay the next report if necessary
-    return true unless ::File.exist?(report_timing_file)
-    seconds_since_last_run = Time.now - ::File.mtime(report_timing_file)
-    seconds_since_last_run > interval
-  end
-
-  def check_interval_settings(interval, interval_enabled, interval_time)
-    # handle intervals
-    interval_seconds = 0 # always run this by default, unless interval is defined
-    if !interval.nil? && interval_enabled
-      interval_seconds = interval_time * 60 # seconds in interval
-      Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
-    end
-    # returns true if profile is overdue to run
-    profile_overdue_to_run?(interval_seconds)
-  end
-
   # takes value of reporters and returns array to ensure backwards-compatibility
   def handle_reporters(reporters)
     return reporters if reporters.is_a? Array

@@ -11,10 +11,6 @@ require_relative '../../data/mock.rb'
 describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }
 
-  it 'report_timing_file returns where the report timing file is located' do
-    expect(@helpers.report_timing_file).to eq("#{Chef::Config[:file_cache_path]}/compliance/report_timing.json")
-  end
-
   it 'handle_reporters returns array of reporters when given array' do
     reporters = %w(chef-compliance json-file)
     expect(@helpers.handle_reporters(reporters)).to eq(%w(chef-compliance json-file))
@@ -23,13 +19,6 @@ describe ReportHelpers do
   it 'handle_reporters returns array of reporters when given string' do
     reporters = 'chef-compliance'
     expect(@helpers.handle_reporters(reporters)).to eq(['chef-compliance'])
-  end
-
-  it 'create_timestamp_file creates a new file' do
-    expected_file_path = @helpers.report_timing_file
-    @helpers.create_timestamp_file
-    expect(File).to exist(expected_file_path.to_s)
-    File.delete(expected_file_path.to_s)
   end
 
   it 'report_profile_sha256s returns array of profile ids found in the report' do

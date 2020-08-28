@@ -35,30 +35,24 @@ describe 'Chef::Handler::AuditReport methods' do
     @audit_report = Chef::Handler::AuditReport.new
   end
 
-  describe ReportHelpers do
-    let(:helpers) { Class.new { extend ReportHelpers } }
-    before :each do
-      @interval = 1440
-      @interval_time = 1440
-      interval_enabled = true
-      write_to_file = false
-      @helpers.create_timestamp_file
+  describe '#check_interval_settings' do
+    let(:interval) { 1440 }
+    let(:interval_time) { 1440 }
+
+    before do
+      @audit_report.create_timestamp_file
     end
 
     describe 'report when interval settings are set to default (disabled)' do
-      interval_enabled = false
-
       it 'returns true for check_interval_settings' do
-        status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time)
+        status = @audit_report.check_interval_settings(interval, false, interval_time)
         expect(status).to eq(true)
       end
     end
 
     describe 'report when interval settings are enabled' do
-      interval_enabled = true
-
       it 'returns false for check_interval_settings' do
-        status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time)
+        status = @audit_report.check_interval_settings(interval, true, interval_time)
         expect(status).to eq(false)
       end
     end
