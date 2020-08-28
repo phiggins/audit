@@ -6,6 +6,7 @@ require 'uri'
 require 'bundles/inspec-compliance/target'
 require 'inspec/fetcher'
 require 'inspec/errors'
+require_relative '../../../../libraries/helper'
 
 # This class implements an InSpec fetcher for for Chef Server. The implementation
 # is based on the Chef Compliance fetcher and only adapts the calls to redirect
@@ -74,7 +75,7 @@ module ChefServer
         Chef::Config[:ssl_verify_mode] = :verify_none
       end
 
-      target_url = construct_url(chef_server_url_base + url_prefix + '/', reqpath)
+      target_url = ReportHelpers.construct_url(chef_server_url_base + url_prefix + '/', reqpath)
       Chef::Log.info("Fetching profile from: #{target_url}")
       target_url
     end
@@ -113,7 +114,7 @@ module ChefServer
     # internal class methods
     def self.chef_server_reporter?
       return false unless defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes)
-      reporters = get_reporters(Chef.node.attributes['audit'])
+      reporters = ReportHelpers.get_reporters(Chef.node.attributes['audit'])
       # TODO: harmonize with audit_report.rb load_chef_fetcher
       Chef.node.attributes['audit'] && (
         reporters.include?('chef-server') ||

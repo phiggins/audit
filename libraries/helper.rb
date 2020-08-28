@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 module ReportHelpers
+  extend self
+
   # Returns the uuid for the current converge
   def run_id
     return unless run_context &&

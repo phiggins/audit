@@ -18,10 +18,7 @@
 # limitations under the License.
 
 require 'spec_helper'
-require 'json'
-require_relative '../../../libraries/helper'
 require_relative '../../../files/default/handler/audit_report'
-require_relative '../../data/mock.rb'
 
 describe 'Chef::Handler::AuditReport methods' do
   let(:mynode) { Chef::Node.new }

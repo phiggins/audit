@@ -40,7 +40,7 @@ describe ChefServer::Fetcher do
   context 'when target is a string' do
     before :each do
       allow(Chef).to receive(:node).and_return(mynode)
-      allow(ChefServer::Fetcher).to receive(:construct_url).and_return(URI(myprofile))
+      allow(ReportHelpers).to receive(:construct_url).and_return(URI(myprofile))
       allow(ChefServer::Fetcher).to receive(:chef_server_visibility?).and_return(true)
     end
 

@@ -1,5 +1,4 @@
 require 'chef/handler'
-include ReportHelpers
 
 class Chef
   class Handler
@@ -10,7 +9,7 @@ class Chef
 
       def report
         # get reporter(s) from attributes as an array
-        reporters = get_reporters(node['audit'])
+        reporters = ReportHelpers.get_reporters(node['audit'])
 
         if reporters.include?('chef-visibility')
           Chef::Log.warn 'reporter `chef-visibility` is deprecated and removed in audit cookbook 4.0. Please use `chef-automate`.'

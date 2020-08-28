@@ -5,24 +5,21 @@
 
 require 'spec_helper'
 require_relative '../../../libraries/helper'
-require_relative '../../../files/default/handler/audit_report'
 require_relative '../../data/mock.rb'
 
 describe ReportHelpers do
-  let(:helpers) { Class.new { extend ReportHelpers } }
-
   it 'handle_reporters returns array of reporters when given array' do
     reporters = %w(chef-compliance json-file)
-    expect(@helpers.handle_reporters(reporters)).to eq(%w(chef-compliance json-file))
+    expect(ReportHelpers.handle_reporters(reporters)).to eq(%w(chef-compliance json-file))
   end
 
   it 'handle_reporters returns array of reporters when given string' do
     reporters = 'chef-compliance'
-    expect(@helpers.handle_reporters(reporters)).to eq(['chef-compliance'])
+    expect(ReportHelpers.handle_reporters(reporters)).to eq(['chef-compliance'])
   end
 
   it 'report_profile_sha256s returns array of profile ids found in the report' do
-    expect(@helpers.report_profile_sha256s(MockData.inspec_results)).to eq(['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'])
+    expect(ReportHelpers.report_profile_sha256s(MockData.inspec_results)).to eq(['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'])
   end
 
   it 'strip_profiles_meta removes the metadata from the profiles' do
@@ -85,17 +82,17 @@ describe ReportHelpers do
       },
       version: '1.2.1',
     }
-    expect(@helpers.strip_profiles_meta(MockData.inspec_results, [], 1.1)).to eq(expected_stripped_report)
+    expect(ReportHelpers.strip_profiles_meta(MockData.inspec_results, [], 1.1)).to eq(expected_stripped_report)
   end
 
   it 'strip_profiles_meta is not removing the metadata from the missing profiles' do
     expected_stripped_report = MockData.inspec_results
     expected_stripped_report[:run_time_limit] = 1.1
-    expect(@helpers.strip_profiles_meta(MockData.inspec_results, ['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'], 1.1)).to eq(expected_stripped_report)
+    expect(ReportHelpers.strip_profiles_meta(MockData.inspec_results, ['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'], 1.1)).to eq(expected_stripped_report)
   end
 
   it 'truncate_controls_results truncates controls results' do
-    truncated_report = @helpers.truncate_controls_results(MockData.inspec_results2, 5)
+    truncated_report = ReportHelpers.truncate_controls_results(MockData.inspec_results2, 5)
     expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(5)
     statuses = truncated_report[:profiles][0][:controls][0][:results].map { |r| r[:status] }
     expect(statuses).to eq(%w(failed failed failed skipped skipped))
@@ -106,10 +103,10 @@ describe ReportHelpers do
     expect(statuses).to eq(%w(passed passed))
     expect(truncated_report[:profiles][0][:controls][1][:removed_results_counts]).to eq(nil)
 
-    truncated_report = @helpers.truncate_controls_results(MockData.inspec_results2, 0)
+    truncated_report = ReportHelpers.truncate_controls_results(MockData.inspec_results2, 0)
     expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(9)
 
-    truncated_report = @helpers.truncate_controls_results(MockData.inspec_results2, 1)
+    truncated_report = ReportHelpers.truncate_controls_results(MockData.inspec_results2, 1)
     expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(1)
   end
 end
