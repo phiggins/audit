@@ -110,27 +110,6 @@ module ReportHelpers
     File.expand_path('../../files/default/vendor', __FILE__)
   end
 
-  def cookbook_handler_path
-    File.expand_path('../../files/default/handler', __FILE__)
-  end
-
-  # Copies ['audit']['attributes'] into run_state for the audit_handler to read them later
-  # Deletes ['audit']['attributes'] if instructed by ['audit']['attributes_save']
-  def copy_audit_attributes
-    node.run_state['audit_attributes'] = node['audit']['attributes']
-    node.rm('audit', 'attributes') unless node['audit']['attributes_save']
-  end
-
-  def load_audit_handler
-    libpath = ::File.join(cookbook_handler_path, 'audit_report')
-    Chef::Log.info("loading handler from #{libpath}")
-    $LOAD_PATH.unshift(libpath) unless $LOAD_PATH.include?(libpath)
-    require libpath
-    handler = Chef::Handler::AuditReport.new
-    Chef::Config.send('report_handlers') << handler
-    Chef::Config.send('exception_handlers') << handler
-  end
-
   # taking node['audit'] as parameter so that it can be called from the chef-server fetcher as well
   # audit['collector'] is the legacy reporter,
   def get_reporters(audit)
@@ -250,5 +229,3 @@ module ReportHelpers
     report_shas
   end
 end
-
-::Chef::DSL::Recipe.include ReportHelpers

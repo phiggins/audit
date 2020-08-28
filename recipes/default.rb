@@ -29,6 +29,13 @@ end
 
 include_recipe 'audit::inspec'
 
-# Call helper methods located in libraries/helper.rb
-copy_audit_attributes
-load_audit_handler
+node.run_state['audit_attributes'] = node['audit']['attributes']
+node.rm('audit', 'attributes') unless node['audit']['attributes_save']
+
+libpath = ::File.join(File.expand_path('../files/default/handler', __dir__), 'audit_report')
+Chef::Log.info("loading handler from #{libpath}")
+require libpath
+
+handler = Chef::Handler::AuditReport.new
+Chef::Config.send('report_handlers') << handler
+Chef::Config.send('exception_handlers') << handler
