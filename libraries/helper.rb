@@ -20,11 +20,6 @@ module ReportHelpers
     node['chef_guid'] || defined?(Chef::DataCollector::Messages) && Chef::DataCollector::Messages.node_uuid
   end
 
-  # Convert the strings in the profile definitions into symbols for handling
-  def tests_for_runner(profiles)
-    profiles.map { |profile| Hash[profile.map { |k, v| [k.to_sym, v] }] }
-  end
-
   def construct_url(server, path)
     # ensure we do not modify a frozen String
     srv = server.dup

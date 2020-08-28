@@ -11,12 +11,6 @@ require_relative '../../data/mock.rb'
 describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }
 
-  it 'tests_for_runner converts all key strings to symbols' do
-    tests = [{ 'name': 'ssh', 'url': 'https://github.com/dev-sec/tests-ssh-hardening' }]
-    symbol_tests = @helpers.tests_for_runner(tests)
-    expect(symbol_tests).to eq([{ name: 'ssh', url: 'https://github.com/dev-sec/tests-ssh-hardening' }])
-  end
-
   it 'report_timing_file returns where the report timing file is located' do
     expect(@helpers.report_timing_file).to eq("#{Chef::Config[:file_cache_path]}/compliance/report_timing.json")
   end

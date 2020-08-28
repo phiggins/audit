@@ -176,8 +176,7 @@ class Chef
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
-        # parse profile hashes for runner, see libraries/helper.rb
-        tests = tests_for_runner(profiles)
+        tests = profiles.map { |profile| Hash[profile.map { |k, v| [k.to_sym, v] }] }
         if !tests.empty?
           tests.each { |target| runner.add_target(target, opts) }
 
