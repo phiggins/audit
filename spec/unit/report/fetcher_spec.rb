@@ -82,19 +82,17 @@ describe ChefServer::Fetcher do
     end
 
     it 'should raise error' do
-      myproc = proc {
-        config = {
-          'server_type' => 'automate',
-          'automate' => {
-            'ent' => 'my_ent',
-            'token_type' => 'dctoken',
-          },
-          'profile' => ['admin', 'linux-baseline', '2.0'],
-        }
-        mynode.default['audit']['reporter'] = 'chef-server'
-        ChefServer::Fetcher.target_url('non_profile_url', config).read
+      config = {
+        'server_type' => 'automate',
+        'automate' => {
+          'ent' => 'my_ent',
+          'token_type' => 'dctoken',
+        },
+        'profile' => ['admin', 'linux-baseline', '2.0'],
       }
-      expect { myproc.call }.to raise_error(Errno::ECONNREFUSED)
+      mynode.default['audit']['reporter'] = 'chef-server'
+
+      expect { ChefServer::Fetcher.target_url('non_profile_url', config).read }.to raise_error(Errno::ECONNREFUSED)
     end
   end
 end
