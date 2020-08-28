@@ -131,6 +131,10 @@ class Chef
         require 'bundles/inspec-compliance/target'
       end
 
+      def cookbook_vendor_path
+        File.expand_path('../../../files/default/vendor', __dir__)
+      end
+
       # we expect inspec to be loaded before
       def load_chef_fetcher
         Chef::Log.debug "Load Chef Server fetcher from: #{cookbook_vendor_path}"

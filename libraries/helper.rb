@@ -106,10 +106,6 @@ module ReportHelpers
     [reporters]
   end
 
-  def cookbook_vendor_path
-    File.expand_path('../../files/default/vendor', __FILE__)
-  end
-
   # taking node['audit'] as parameter so that it can be called from the chef-server fetcher as well
   # audit['collector'] is the legacy reporter,
   def get_reporters(audit)
